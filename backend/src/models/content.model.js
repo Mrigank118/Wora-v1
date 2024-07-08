@@ -1,31 +1,30 @@
 import mongoose from "mongoose";
 
-const contentSchema = new mongoose(
-    {
-        title: {
-            type: String, 
-            required: true
-        },
+const contentSchema = new mongoose.Schema({
 
-        body: { 
-            type: String 
-        },
+  user_id:{ 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User', required: true
+},
 
-        appSpecificContent: {
-            type: Schema.Types.Mixed
-        },
-        userId: { 
-            type: Schema.Types.ObjectId, 
-            ref: 'User',
-            required: true 
-        }
+  title:{
+    type: String, required: true
+},
 
-    },
+  content: {
+    type: String, required: true
+},
 
-    {timestamps: true}
-)
+  tags: {
+    type: String,
+},
 
-const Content = mongoose.model('Content', contentSchema)
+  created_at: {
+    type: Date, default: Date.now
+},
 
+});
+
+const Content = mongoose.model('Content', contentSchema);
 
 export default Content

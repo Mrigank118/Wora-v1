@@ -1,14 +1,18 @@
 import express from 'express';
-import { getContent, adaptContent, adaptHashtags, adaptHeading } from "../controllers/conent.controller.js"
+import { getResponse, getAdaptedContent, getHeading, getHashtags, saveContent, getContent, } from '../controllers/content.controller.js';
 
-const router = express.Router();
+const contentRouter = express.Router();
 
-// Route for fetching content
-router.post('/content', getContent);
+// Routes for content operations
+contentRouter.post('/getResponse', getResponse);
+contentRouter.post('/getAdaptContent', getAdaptedContent);
+contentRouter.post('/getHeading', getHeading);
+contentRouter.post('/getHashtags', getHashtags);
 
-// Route for adapting content
-router.post('/adaptContent', adaptContent);
+// Route for saving notes
+contentRouter.post('/saveContent', saveContent);
 
-router.post('/adaptHeading', adaptHeading);
-router.post('/adaptHashtags', adaptHashtags);
-export default router;
+// Route for fetching notes
+contentRouter.get('/getContent/:user_id', getContent);
+
+export default contentRouter;

@@ -18,7 +18,7 @@ export async function getGroqChatCompletion(prompt) {
     }
 }
 
-export async function getAdaptedContent(promptResponse) {
+export async function AdaptedContent(promptResponse) {
     // Define your default text to prepend to the user's prompt
     const defaultText = 'Make the tone a little funny and make it short: Do not use your Speech  ';
 
@@ -38,7 +38,7 @@ export async function getAdaptedContent(promptResponse) {
         throw error;
     }
 }
-export async function getHashtags(promptResponse) {
+export async function Hashtags(promptResponse) {
     // Define your default text to prepend to the user's prompt
     const defaultText = "Provide only 4 hashtags in one word with no additional text."
 ;
@@ -60,7 +60,7 @@ export async function getHashtags(promptResponse) {
 }
 
 
-export async function getHeading(promptResponse) {
+export async function Heading(promptResponse) {
     // Define your default text to prepend to the user's prompt
     const defaultText = 'Give one short Heading in simple text: ';
 
