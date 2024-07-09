@@ -1,0 +1,97 @@
+
+.login-container {
+  background-color: whitesmoke;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 300px;
+  color: #666;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-header h2 {
+  margin: 0;
+}
+
+.form-header p {
+  margin: 0;
+  color: #666;
+}
+
+.form-tabs {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.tab-button {
+  background-color:#ccc;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  flex-grow: 1;
+  text-align: center;
+}
+
+.tab-button.active {
+  background-color: #cccccc7d;
+}
+
+.form-content {
+  display: none;
+  width: 100%;
+}
+
+.form-content.active {
+  display: block;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 5px;
+}
+
+input {
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.submit {
+  padding: 10px;
+  background-color: #cccccc7d;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.submit:hover {
+  background-color: #ccc;
+}
+
+.forgot-password {
+  text-align: right;
+  margin-bottom: 10px;
+  color: #666;
+  text-decoration: none;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
