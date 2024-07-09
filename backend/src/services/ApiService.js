@@ -1,57 +1,45 @@
-import Groq from 'groq-sdk';
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import dotenv from 'dotenv';
 
 dotenv.config();
-const apiKey = process.env.GROQ_API_KEY;
-const groq = new Groq({ apiKey });
+const apiKey = process.env.GEMINI_API_KEY; // Ensure your .env file has GEMINI_API_KEY
 
-export async function getGroqChatCompletion(prompt) {
+const genAI = new GoogleGenerativeAI(apiKey);
+
+export async function getGeminiChatCompletion(prompt) {
     try {
-        const response = await groq.chat.completions.create({
-            messages: [{ role: 'user', content: prompt }],
-            model: 'mixtral-8x7b-32768',
-        });
-        return response.choices[0]?.message?.content || '';
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }); // Replace with the actual model ID if different
+        const result = await model.generateContent(prompt);
+        const response = result.response;
+        const text = await response.text();
+        return text;
     } catch (error) {
-        console.error('Error in getGroqChatCompletion:', error);
+        console.error('Error in getGeminiChatCompletion:', error);
         throw error;
     }
 }
 
 export async function AdaptedContent(promptResponse) {
-    // Define your default text to prepend to the user's prompt
-    const defaultText = 'Make the tone a little funny and make it short: Do not use your Speech  ';
+    const defaultText = 'Make the tone a little funny and make it short: Do not use your Speech ';
 
     try {
-
-        // Concatenate the default text with the user's prompt
         const fullPrompt = defaultText + promptResponse;
-
         console.log('THE FULL PROMPT IS:', fullPrompt);
-
-        // Get the response from the AI service using the full prompt
-        const adaptedContent = await getGroqChatCompletion(fullPrompt);
-
+        const adaptedContent = await getGeminiChatCompletion(fullPrompt);
         return adaptedContent;
     } catch (error) {
         console.error('Error in getAdaptedContent:', error);
         throw error;
     }
 }
+
 export async function Hashtags(promptResponse) {
-    // Define your default text to prepend to the user's prompt
-    const defaultText = "Provide only 4 hashtags in one word with no additional text."
-;
+    const defaultText = "Provide only 4 hashtags in one word with no additional text.";
 
     try {
-        // Concatenate the default text with the user's prompt
         const fullPrompt = defaultText + promptResponse;
-
         console.log('THE FULL HASHTAGS PROMPT IS:', fullPrompt);
-
-        // Get the response from the AI service using the full prompt
-        const adaptedHashtags = await getGroqChatCompletion(fullPrompt);
-
+        const adaptedHashtags = await getGeminiChatCompletion(fullPrompt);
         return adaptedHashtags;
     } catch (error) {
         console.error('Error in getHashtags:', error);
@@ -59,21 +47,14 @@ export async function Hashtags(promptResponse) {
     }
 }
 
-
 export async function Heading(promptResponse) {
-    // Define your default text to prepend to the user's prompt
     const defaultText = 'Give one short Heading in simple text: ';
 
     try {
-        // Concatenate the default text with the user's prompt
         const fullPrompt = defaultText + promptResponse;
-
         console.log('THE FULL Heading PROMPT IS:', fullPrompt);
-
-        // Get the response from the AI service using the full prompt
-        const adaptedHashtags = await getGroqChatCompletion(fullPrompt);
-
-        return adaptedHashtags;
+        const adaptedHeading = await getGeminiChatCompletion(fullPrompt);
+        return adaptedHeading;
     } catch (error) {
         console.error('Error in Heading:', error);
         throw error;

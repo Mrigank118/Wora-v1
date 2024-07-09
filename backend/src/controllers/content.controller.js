@@ -1,10 +1,10 @@
-import { getGroqChatCompletion, AdaptedContent, Heading, Hashtags } from "../services/ApiService.js";
+import { getGeminiChatCompletion, AdaptedContent, Heading, Hashtags } from "../services/ApiService.js";
 import Content from "../models/content.model.js";
 
 export const getResponse = async (req, res) => {
     const { prompt } = req.body; // Extract prompt from request body
     try {
-        const content = await getGroqChatCompletion(prompt);
+        const content = await getGeminiChatCompletion(prompt);
         // Here you can add logic to adapt content for different platforms
         res.json({ success: true, content });
     } catch (error) {
@@ -66,7 +66,7 @@ export const saveContent = async (req, res) => {
         res.status(500).json({ success: false, error: error.message });
     }
 };
-
+ 
 // Function to get notes by user ID
 export const getContent = async (req, res) => {
     const { user_id } = req.params;
