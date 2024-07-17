@@ -6,7 +6,7 @@ import Notes from './notes';
 
 function App() {
   return (
-    <Router>
+    <Router basename='/Wora-v1'>
       <Routes>
         <Route path="/" element={<Maincontent />} />
         <Route path="/login" element={<Loginpage />} />
