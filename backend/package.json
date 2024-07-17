@@ -4,7 +4,8 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "dev": "node -r dotenv/config --experimental-json-modules src/server.js"
+    "dev": "node -r dotenv/config --experimental-json-modules src/server.js",
+    "build": "node src/server.js" 
   },
   "keywords": [],
   "author": "",
@@ -23,7 +24,8 @@
     "moment-timezone": "^0.5.45",
     "mongoose": "^8.4.4",
     "nodemailer": "^6.9.14",
-    "openai": "^4.52.1"
+    "openai": "^4.52.1",
+    "vercel": "^35.0.2"
   },
   "devDependencies": {
     "nodemon": "^3.1.4"
