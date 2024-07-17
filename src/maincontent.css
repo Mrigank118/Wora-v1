@@ -155,6 +155,12 @@
     margin-top: 60px;
     background-color: var(--textcolourmain);
   }
+  .buttonClose
+  {
+    background-color: #322d20;
+    height: 40px;
+    width: 90px;
+  }
   .notes-grid {
     display: flex;
     gap: 20px;

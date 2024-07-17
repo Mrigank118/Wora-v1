@@ -3,19 +3,17 @@ import { useUser } from './userContext';
 import { useNavigate } from 'react-router-dom';
 import './loginpage.css';
 
-const Loginpage = ({  onLoginSuccess }) => {
+const Loginpage = ({ onLoginSuccess }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
-  const navigate = useNavigate();
   const { setUserId } = useUser();
-  
 
   const handleLoginSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch('http://localhost:4000/WORA/login', {
+      const response = await fetch('https://wora-api.vercel.app/WORA/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -30,12 +28,10 @@ const Loginpage = ({  onLoginSuccess }) => {
       }
 
       const data = await response.json();
-      console.log('Logged in successfully!');
+      console.log('Logged in successfully!', data.user_id);
       console.log(data.user_id);
-
-      // Notify the parent component of the successful login
-     setUserId(data.user_id);
-     onLoginSuccess(data.user_id,data.username);
+      setUserId(data.user_id);
+      onLoginSuccess(data.user_id, data.username, data.token);
     } catch (error) {
       console.error('Error logging in:', error);
     }
@@ -44,7 +40,7 @@ const Loginpage = ({  onLoginSuccess }) => {
   const handleSignupSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch('http://localhost:4000/WORA/', {
+      const response = await fetch('https://wora-api.vercel.app/WORA/users/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -85,6 +81,7 @@ const Loginpage = ({  onLoginSuccess }) => {
   return (
     <div className="login-container">
       <div className="form-container">
+
         <div className="form-header">
           <h2>Welcome</h2>
           <p>Sign in or create an account to get started.</p>
@@ -96,9 +93,9 @@ const Loginpage = ({  onLoginSuccess }) => {
         {isLogin ? (
           <div className="form-content active">
             <form onSubmit={handleLoginSubmit}>
-              <label htmlFor="login-email" style={{textAlign:"left"}}>Email</label>
+              <label htmlFor="login-email" style={{ textAlign: "left" }}>Email</label>
               <input type="email" id="login-email" name="login-email" required />
-              <label htmlFor="login-password" style={{textAlign:"left"}}>Password</label>
+              <label htmlFor="login-password" style={{ textAlign: "left" }}>Password</label>
               <input type="password" id="login-password" name="login-password" required />
               <button className="submit" type="submit">Sign In</button>
             </form>

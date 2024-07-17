@@ -7,15 +7,17 @@ import breezeMusic from "./Music/rain.mp3";
 import coffeeMusic from "./Music/coffee.mp3";
 import knowledgeGirl from "./illustrations/knowledgeGirl.png";
 import ReactMarkdown from "react-markdown";
+import { useUser } from "./userContext";
 
 const Maincontent = () => {
+  const { handleLogout } = useUser();
   const [prompt, setPrompt] = useState("");
   const [isLoginPageVisible, setIsLoginPageVisible] = useState(false);
   const [userId, setUserId] = useState("");
   const [username, setUsername] = useState("user");
+  const [token, setToken] = useState("anonymous");
   const [typingEffectText, setTypingEffectText] = useState("");
   const [response, setResponse] = useState("");
-  const [notification, setNotification] = useState("");
   const [adaptedResponse, setAdaptedResponse] = useState({
     Twitter: "",
     Instagram: "",
@@ -37,18 +39,50 @@ const Maincontent = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [hashtag, setHashtag] = useState("");
-  const handleSaveClick = () => {
-    setIsLoginPageVisible(true); // Show the login page
-  };
 
-  const handleCloseLoginPage = () => {
-    setIsLoginPageVisible(false); // Hide the login page
-  };
+  useEffect(() => {
+    const storedUserId = localStorage.getItem("userId");
+    const storedUsername = localStorage.getItem("username");
+    const storedToken = localStorage.getItem("token");
+    if (storedUserId && storedUsername && storedToken) {
+      setUserId(storedUserId);
+      setUsername(storedUsername);
+      setToken(storedToken);
+    } else {
+      setIsLoginPageVisible(true); // Show login page if not logged in
+    }
+  }, []);
 
-  const handleLoginSuccess = (id, name) => {
+  console.log("TOKEN: ", token);
+
+  const handleLoginSuccess = (id, name, token) => {
+    localStorage.setItem("userId", id); // Store userId in local storage
+    localStorage.setItem("username", name);
+    localStorage.setItem("token", token); // Store username in local storage
     setUserId(id);
     setUsername(name);
+    setToken(token);
     setIsLoginPageVisible(false); // Hide the login page after successful login
+  };
+
+  console.log("TOKEN AFTER LOGIN: ", token);
+
+  const onhandleLogout = () => {
+    handleLogout();
+    localStorage.removeItem("username");
+    localStorage.removeItem("token"); // Clear username from local storage// Clear userId state
+    setUsername("user");
+    setToken("");
+    handleLogout();
+  };
+  console.log("TOKEN AFTER LOGOUT: ", token);
+
+  const handleLogin = () => {
+    setIsLoginPageVisible(true); // Show the login page
+  };
+  const handleCloseLogin = () => {
+    console.log("Closinggg");
+    setIsLoginPageVisible(false); // Show the login page
   };
 
   const handleTemplateClick = () => {
@@ -58,7 +92,7 @@ const Maincontent = () => {
   };
   const handleNotification = async () => {
     try {
-      const res = await fetch("http://localhost:4000/WORA/notify", {
+      const res = await fetch("https://wora-api.vercel.app/WORA/reminders/notify", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -76,7 +110,7 @@ const Maincontent = () => {
 
   const handleGenerate = async () => {
     try {
-      const contentRes = await fetch("http://localhost:4000/WORA/getResponse", {
+      const contentRes = await fetch("https://wora-api.vercel.app/WORA/contents/getResponse", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -92,14 +126,14 @@ const Maincontent = () => {
       const contentString = contentData.content;
 
       const [headingRes, hashtagRes] = await Promise.all([
-        fetch("http://localhost:4000/WORA/getHeading", {
+        fetch("https://wora-api.vercel.app/WORA/contents/getHeading", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ responsePrompt: contentString }),
         }),
-        fetch("http://localhost:4000/WORA/getHashtags", {
+        fetch("https://wora-api.vercel.app/WORA/contents/getHashtags", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -123,10 +157,12 @@ const Maincontent = () => {
 
       const formattedContent = `
         <div class="prompt-style">${prompt}</div>
-        <h3 class="heading-style">${headingData.adaptedHeading || "No heading available"
+        <h3 class="heading-style">${
+          headingData.adaptedHeading || "No heading available"
         }</h3>
         <p class="content-style">${contentString}</p>
-        <div class="hashtag-style">${hashtagData.adaptedHashtags || "No hashtags available"
+        <div class="hashtag-style">${
+          hashtagData.adaptedHashtags || "No hashtags available"
         }</div>
       `;
 
@@ -140,7 +176,7 @@ const Maincontent = () => {
 
   const handleAdapt = async () => {
     try {
-      const res = await fetch("http://localhost:4000/WORA/getAdaptedContent", {
+      const res = await fetch("https://wora-api.vercel.app/WORA/contents/getAdaptedContent", {
         //4
         method: "POST",
         headers: {
@@ -285,7 +321,7 @@ const Maincontent = () => {
     console.log(`User ID: ${noteUserId}`);
 
     try {
-      const response = await fetch("http://localhost:4000/WORA/saveContent", {
+      const response = await fetch("https://wora-api.vercel.app/WORA/contents/saveContent", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -309,50 +345,20 @@ const Maincontent = () => {
       console.error("Error:", error);
     }
   };
-  console.log({userId});
-  console.log(userId.userId);
-
-
-  const handleGetContent = async ({userId}) => {
-    console.log(`Fetching content for userId: ${userId}`);
-    try {
-      const response = await fetch(`http://localhost:4000/WORA/getContent/${userId}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-  
-      const result = await response.json();
-      console.log(`Response status: ${response.status}`);
-      console.log(`Response body: ${JSON.stringify(result)}`);
-  
-      if (response.ok) {
-        console.log(`Fetched notes: ${JSON.stringify(result.notes)}`);
-        return result.notes;
-      } else {
-        console.error(`Error fetching notes: ${result.error}`);
-        return [];
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      return [];
-    }
-  };
-  
 
   return (
     <div className={`app-container ${currentTheme}`}>
       <aside className="sidebar">
         <div className="user">
-              <svg className="user-icon"
-              xmlns="http://www.w3.org/2000/svg"
-              height="25"
-              width="20"
-              viewBox="0 0 448 512"
-            >
-              <path d="M304 128a80 80 0 1 0 -160 0 80 80 0 1 0 160 0zM96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM49.3 464H398.7c-8.9-63.3-63.3-112-129-112H178.3c-65.7 0-120.1 48.7-129 112zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3z" />
-            </svg>
+          <svg
+            className="user-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            height="25"
+            width="20"
+            viewBox="0 0 448 512"
+          >
+            <path d="M304 128a80 80 0 1 0 -160 0 80 80 0 1 0 160 0zM96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM49.3 464H398.7c-8.9-63.3-63.3-112-129-112H178.3c-65.7 0-120.1 48.7-129 112zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3z" />
+          </svg>
           <div className="user-title">{username}</div>
         </div>
         <div className="navigation">
@@ -426,23 +432,23 @@ const Maincontent = () => {
           <div className="workspace">
             <h3 className="workspace-title">Workspace</h3>
             <Link to="/notes" className="nav-item">
-          <svg
-            className="nav-icon"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"></path>
-            <path d="M15 3v4a2 2 0 0 0 2 2h4"></path>
-          </svg>
-          <span>Notes</span>
-        </Link>
+              <svg
+                className="nav-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"></path>
+                <path d="M15 3v4a2 2 0 0 0 2 2h4"></path>
+              </svg>
+              <span>Notes</span>
+            </Link>
             <a className="nav-item" href="#" rel="ugc">
               <svg
                 className="nav-icon"
@@ -502,7 +508,7 @@ const Maincontent = () => {
               </svg>
               <span>Dashboard</span>
             </a>
-            <a className="nav-item" href="#" rel="ugc">
+            <a className="nav-item" href="#" rel="ugc" onClick={onhandleLogout}>
               <svg
                 className="nav-icon"
                 xmlns="http://www.w3.org/2000/svg"
@@ -548,7 +554,7 @@ const Maincontent = () => {
 
       <main className="main-content">
         <header className="main-header">
-          <h2 style={{fontSize:"40px"}}>wora.</h2>
+          <h2 style={{ fontSize: "40px" }}>wora.</h2>
           <div className="header-actions">
             <input
               className="search-input"
@@ -572,7 +578,7 @@ const Maincontent = () => {
                 <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
               </svg>
             </button>
-            <button>
+            <button className="logout" >
               <svg
                 className="header-icon"
                 xmlns="http://www.w3.org/2000/svg"
@@ -589,22 +595,22 @@ const Maincontent = () => {
                 <circle cx="12" cy="12" r="3"></circle>
               </svg>
             </button>
-            <button onClick={handleSaveClick}>
+            <button onClick={handleLogin}>
               {isLoginPageVisible && (
-                <div className="login-overlay">
-                  <Loginpage
-                    onLoginSuccess={handleLoginSuccess}
-                  />
-                </div>
+                  <div className="login-overlay">
+                    <Loginpage onLoginSuccess={handleLoginSuccess} />
+                  </div>
               )}
-              <svg className="user-icon"
-              xmlns="http://www.w3.org/2000/svg"
-              height="20"
-              width="20"
-              viewBox="0 0 448 512"
-            >
-              <path d="M304 128a80 80 0 1 0 -160 0 80 80 0 1 0 160 0zM96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM49.3 464H398.7c-8.9-63.3-63.3-112-129-112H178.3c-65.7 0-120.1 48.7-129 112zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3z" />
-            </svg>
+
+              <svg
+                className="user-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                height="20"
+                width="20"
+                viewBox="0 0 448 512"
+              >
+                <path d="M304 128a80 80 0 1 0 -160 0 80 80 0 1 0 160 0zM96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM49.3 464H398.7c-8.9-63.3-63.3-112-129-112H178.3c-65.7 0-120.1 48.7-129 112zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3z" />
+              </svg>
             </button>
           </div>
         </header>
@@ -714,29 +720,32 @@ const Maincontent = () => {
           </div>
 
           <div className="notes-column">
-      {platforms.map((platform) => (
-        <div className="card" key={platform}>
-          <div className="card-header">
-            <div className="card-title">
-              <h3>{platform}</h3>
-            </div>
-            <p className="card-description">
-              {convertMarkdownToPlainText(adaptedResponse[platform]) || "Here goes your content..."}
-            </p>
+            {platforms.map((platform) => (
+              <div className="card" key={platform}>
+                <div className="card-header">
+                  <div className="card-title">
+                    <h3>{platform}</h3>
+                  </div>
+                  <p className="card-description">
+                    {convertMarkdownToPlainText(adaptedResponse[platform]) ||
+                      "Here goes your content..."}
+                  </p>
+                </div>
+                {/* Conditionally render the footer based on description content */}
+                {!adaptedResponse[platform] && ( // Check if description is empty or falsy
+                  <div className="card-footer">
+                    <p className="card-footer-item">Please wait...</p>
+                    <p className="card-footer-item">
+                      Adapting content may take some time.
+                    </p>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
-          {/* Conditionally render the footer based on description content */}
-          {!adaptedResponse[platform] && ( // Check if description is empty or falsy
-            <div className="card-footer">
-              <p className="card-footer-item">Please wait...</p>
-              <p className="card-footer-item">Adapting content may take some time.</p>
-            </div>
-          )}
         </div>
-      ))}
-    </div>
-    </div>
       </main>
     </div>
   );
-}; 
-export default Maincontent ;
+};
+export default Maincontent;
