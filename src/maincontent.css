@@ -1,5 +1,5 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
-/*@font-face {
+@font-face {
   font-family: 'Antikor Mono';
   src: url('fonts/AntikorMono-Regular.woff2') format('woff2'),
        url('fonts/AntikorMono-Regular.woff') format('woff');
@@ -35,8 +35,7 @@
     border: none;
     color:var(--textcolourmain);
     box-sizing: border-box;
-   /* font-family: 'Antikor Mono', monospace;*/
-   font-family: Georgia, 'Times New Roman', Times, serif;;
+    font-family: 'Antikor Mono', monospace;
   }
   .app-container {
     display: flex;
