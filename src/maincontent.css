@@ -35,7 +35,7 @@
     border: none;
     color:var(--textcolourmain);
     box-sizing: border-box;
-    font-family: 'Antikor Mono', monospace;
+    font-family:Georgia, 'Times New Roman', Times, serif;
   }
   .app-container {
     display: flex;
