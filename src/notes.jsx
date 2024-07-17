@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './notes.css';
 import { useUser } from './userContext';
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import Maincontent from './maincontent';
+
 
 const Notes = () => {
   const [notes, setNotes] = useState([]);
@@ -21,7 +25,7 @@ const Notes = () => {
       }
       console.log("fetching notes for ", userId);
       try {
-        const response = await axios.get(`http://localhost:4000/WORA/getContent/${userId}`);
+        const response = await axios.get(`https://wora-api.vercel.app/WORA/contents/getContent/${userId}`);
         console.log(response.data);
         console.log(typeof(response.data));
           setNotes(response.data.notes);
@@ -39,6 +43,14 @@ const Notes = () => {
     setCurrentTheme(themes[nextIndex]);
     setThemeIndex(nextIndex);
   };
+
+  const navigate = useNavigate();
+
+  const handleDashboardClick = () => {
+    console.log("navigating to main page");
+    navigate("/"); // Adjust the path if your main page has a different route
+  };
+  
 
   return (
     <div className={`note-complete-container ${currentTheme}`}>
@@ -165,7 +177,7 @@ const Notes = () => {
               </svg>
               <span>Calendar</span>
             </a>
-            <a className="nav-item" href="#">
+            <Link to="/" onClick={handleDashboardClick} className="nav-item" href="#">
               <svg
                 className="nav-icon"
                 xmlns="http://www.w3.org/2000/svg"
@@ -184,7 +196,7 @@ const Notes = () => {
                 <rect width="7" height="5" x="3" y="16" rx="1"></rect>
               </svg>
               <span>Dashboard</span>
-            </a>
+            </Link>
             <a className="nav-item" href="#">
               <svg
                 className="nav-icon"
