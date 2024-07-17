@@ -597,18 +597,9 @@ const Maincontent = () => {
             </button>
             <button onClick={handleLogin}>
               {isLoginPageVisible && (
-                <>
-                  <button
-                  onClick={handleCloseLogin}
-                    className="buttonClose"
-                    style={{ backgroundColor: "red" }}                   
-                  >
-                    Close
-                  </button>
                   <div className="login-overlay">
                     <Loginpage onLoginSuccess={handleLoginSuccess} />
                   </div>
-                </>
               )}
 
               <svg
