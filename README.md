@@ -18,8 +18,8 @@ Wora is designed for content creators and students, enabling them to generate, e
 - **PDF Export**: Export your content as a PDF when needed.
 
 ## Tech Stack
-- **Front End**: HTML, CSS, JavaScript, React
-- **Back End**: Node.js, Express, MongoDB, Google Cloud's Vertex AI
+- **Front End**: HTML, CSS, JavaScript, React, Github Pages
+- **Back End**: Node.js, Express, MongoDB, Google Cloud's Vertex AI, Vercel
 
 ## Screenshots
 ### Main Interface
