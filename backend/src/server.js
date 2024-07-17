@@ -21,9 +21,9 @@ app.use(cors());
 setUserMiddleware(app);
 
 // Routes
-app.use('/WORA/', userRouter);
-app.use('/WORA/', contentRouter);
-app.use('/WORA/', reminderRouter);
+app.use('/WORA/users', userRouter);
+app.use('/WORA/contents', contentRouter);
+app.use('/WORA/reminders', reminderRouter);
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`Server started at Port: ${PORT}`);
