@@ -1,5 +1,6 @@
 {
-  "name": "Wora-V1",
+  "homepage": "https://Mrigank118.github.io/Wora-v1",
+  "name": "Wora-v1",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,7 +8,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
