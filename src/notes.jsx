@@ -10,12 +10,10 @@ import Maincontent from './maincontent';
 const Notes = () => {
   const [notes, setNotes] = useState([]);
   const [error, setError] = useState(null);
-  const themes = ["theme-1", "theme-2"];
   const { userId } = useUser();
-  const [currentTheme, setCurrentTheme] = useState(themes[1]);
-  const [themeIndex, setThemeIndex] = useState(0);
-
-  console.log("userId:", userId);
+  const themesNote = ["themeNote-1", "themeNote-2"];
+  const [currentThemeNote, setCurrentThemeNote] = useState(themesNote[1]);
+  const [themeIndexNote, setThemeIndexNote] = useState(0);
 
   useEffect(() => {
     const fetchNotes = async () => {
@@ -25,7 +23,7 @@ const Notes = () => {
       }
       console.log("fetching notes for ", userId);
       try {
-        const response = await axios.get(`https://wora-api.vercel.app/WORA/contents/getContent/${userId}`);
+        const response = await axios.get(`http://localhost:4000/WORA/getContent/${userId}`);
         console.log(response.data);
         console.log(typeof(response.data));
           setNotes(response.data.notes);
@@ -38,28 +36,27 @@ const Notes = () => {
     fetchNotes();
   }, [userId]);
 
-  const handleTemplateClick = () => {
-    const nextIndex = (themeIndex + 1) % themes.length;
-    setCurrentTheme(themes[nextIndex]);
-    setThemeIndex(nextIndex);
-  };
-
   const navigate = useNavigate();
-
   const handleDashboardClick = () => {
     console.log("navigating to main page");
     navigate("/"); // Adjust the path if your main page has a different route
   };
   
+ const handleTemplate = () => {
+  console.log("In Template Notes");
+    const nextIndexNote = (themeIndexNote + 1) % themesNote.length; // Calculate the next index
+    setCurrentThemeNote(themesNote[nextIndexNote]); // Set the next theme
+    setThemeIndexNote(nextIndexNote); // Update the index state
+  };
 
   return (
-    <div className={`note-complete-container ${currentTheme}`}>
-      <aside className="note-sidebar">
-        <div className="navigation">
-          <a
+    <div className={`note-complete-container ${currentThemeNote}`}>
+    <aside className="note-sidebar">
+      <div className="navigation">
+      <a
             className="nav-icon"
             href="#templates"
-            onClick={handleTemplateClick}
+            onClick={handleTemplate}
             style={{ textDecoration: "none" }}
           >
             <svg

@@ -49,7 +49,7 @@ const Maincontent = () => {
       setUsername(storedUsername);
       setToken(storedToken);
     } else {
-      setIsLoginPageVisible(true); // Show login page if not logged in
+      setIsLoginPageVisible(false);
     }
   }, []);
 
@@ -92,7 +92,7 @@ const Maincontent = () => {
   };
   const handleNotification = async () => {
     try {
-      const res = await fetch("https://wora-api.vercel.app/WORA/reminders/notify", {
+      const res = await fetch("http://localhost:4000/WORA/notify", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -110,7 +110,7 @@ const Maincontent = () => {
 
   const handleGenerate = async () => {
     try {
-      const contentRes = await fetch("https://wora-api.vercel.app/WORA/contents/getResponse", {
+      const contentRes = await fetch("http://localhost:4000/WORA/getResponse", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -126,14 +126,14 @@ const Maincontent = () => {
       const contentString = contentData.content;
 
       const [headingRes, hashtagRes] = await Promise.all([
-        fetch("https://wora-api.vercel.app/WORA/contents/getHeading", {
+        fetch("http://localhost:4000/WORA/getHeading", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ responsePrompt: contentString }),
         }),
-        fetch("https://wora-api.vercel.app/WORA/contents/getHashtags", {
+        fetch("http://localhost:4000/WORA/getHashtags", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -176,7 +176,7 @@ const Maincontent = () => {
 
   const handleAdapt = async () => {
     try {
-      const res = await fetch("https://wora-api.vercel.app/WORA/contents/getAdaptedContent", {
+      const res = await fetch("http://localhost:4000/WORA/getAdaptedContent", {
         //4
         method: "POST",
         headers: {
@@ -302,7 +302,6 @@ const Maincontent = () => {
     // Define a custom component for rendering plain text
     const TextRenderer = ({ children }) => <>{children}</>;
 
-    // Return the plain text rendered by ReactMarkdown
     return (
       <ReactMarkdown components={{ text: TextRenderer }}>
         {markdownText}
@@ -321,7 +320,7 @@ const Maincontent = () => {
     console.log(`User ID: ${noteUserId}`);
 
     try {
-      const response = await fetch("https://wora-api.vercel.app/WORA/contents/saveContent", {
+      const response = await fetch("http://localhost:4000/WORA/saveContent", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -346,6 +345,11 @@ const Maincontent = () => {
     }
   };
 
+
+  const onHandleReminder=()=>
+  {
+    alert("New Update coming soon...")
+  }
   return (
     <div className={`app-container ${currentTheme}`}>
       <aside className="sidebar">
@@ -384,7 +388,7 @@ const Maincontent = () => {
               <rect width="9" height="7" x="3" y="14" rx="1"></rect>
               <rect width="5" height="7" x="16" y="14" rx="1"></rect>
             </svg>
-            <span>Templates</span>
+            <span>Theme</span>
           </a>
           <a
             className="nav-item"
@@ -410,7 +414,7 @@ const Maincontent = () => {
             </svg>
             <span>Save</span>
           </a>
-          <a className="nav-item" href="#" rel="ugc">
+          <a className="nav-item" href="#" rel="ugc" onClick={onHandleReminder}>
             <svg
               className="nav-icon"
               xmlns="http://www.w3.org/2000/svg"
@@ -449,7 +453,7 @@ const Maincontent = () => {
               </svg>
               <span>Notes</span>
             </Link>
-            <a className="nav-item" href="#" rel="ugc">
+            <a className="nav-item" href="#" rel="ugc" onClick={onHandleReminder}>
               <svg
                 className="nav-icon"
                 xmlns="http://www.w3.org/2000/svg"
@@ -468,7 +472,7 @@ const Maincontent = () => {
               </svg>
               <span>Reminders</span>
             </a>
-            <a className="nav-item" href="#" rel="ugc">
+            <a className="nav-item" href="#" rel="ugc" onClick={onHandleReminder}>
               <svg
                 className="nav-icon"
                 xmlns="http://www.w3.org/2000/svg"
@@ -508,7 +512,12 @@ const Maincontent = () => {
               </svg>
               <span>Dashboard</span>
             </a>
-            <a className="nav-item" href="#" rel="ugc" onClick={onhandleLogout}>
+            <a
+              className="nav-item"
+              href="#"
+              rel="ugc"
+              onClick={() => window.location.reload()}
+            >
               <svg
                 className="nav-icon"
                 xmlns="http://www.w3.org/2000/svg"
@@ -521,34 +530,27 @@ const Maincontent = () => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
-                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
-                <circle cx="12" cy="12" r="3"></circle>
+                <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
               </svg>
-              <span>Settings</span>
+              <span>New Page</span>
+            </a>
+            <a className="nav-item" href="#" rel="ugc"onClick={onhandleLogout}>
+              <svg
+                className="nav-icon logout"
+                xmlns="http://www.w3.org/2000/svg"
+                height="20"
+                width="20"
+                viewBox="0 0 512 512"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 192 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l210.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128zM160 96c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 32C43 32 0 75 0 128L0 384c0 53 43 96 96 96l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l64 0z" />
+              </svg>
+              <span>Logout</span>
             </a>
           </div>
-          <a
-            className="nav-item"
-            href="#"
-            rel="ugc"
-            onClick={() => window.location.reload()}
-          >
-            <svg
-              className="nav-icon"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
-            </svg>
-            <span>New Page</span>
-          </a>
         </div>
       </aside>
 
@@ -578,7 +580,7 @@ const Maincontent = () => {
                 <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
               </svg>
             </button>
-            <button className="logout" >
+            <button>
               <svg
                 className="header-icon"
                 xmlns="http://www.w3.org/2000/svg"
@@ -597,9 +599,11 @@ const Maincontent = () => {
             </button>
             <button onClick={handleLogin}>
               {isLoginPageVisible && (
+                <>
                   <div className="login-overlay">
                     <Loginpage onLoginSuccess={handleLoginSuccess} />
                   </div>
+                </>
               )}
 
               <svg

@@ -13,7 +13,7 @@ const Loginpage = ({ onLoginSuccess }) => {
   const handleLoginSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch('https://wora-api.vercel.app/WORA/users/login', {
+      const response = await fetch('http://localhost:4000/WORA/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -24,6 +24,7 @@ const Loginpage = ({ onLoginSuccess }) => {
         }),
       });
       if (!response.ok) {
+        alert("Email or Password Incorrect")
         throw new Error('Error logging user');
       }
 
@@ -31,7 +32,7 @@ const Loginpage = ({ onLoginSuccess }) => {
       console.log('Logged in successfully!', data.user_id);
       console.log(data.user_id);
       setUserId(data.user_id);
-      onLoginSuccess(data.user_id, data.username, data.token);
+      onLoginSuccess(data.user_id, data.username,data.token);
     } catch (error) {
       console.error('Error logging in:', error);
     }
@@ -40,7 +41,7 @@ const Loginpage = ({ onLoginSuccess }) => {
   const handleSignupSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch('https://wora-api.vercel.app/WORA/users/', {
+      const response = await fetch('http://localhost:4000/WORA/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

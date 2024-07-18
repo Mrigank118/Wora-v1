@@ -90,7 +90,11 @@
     margin-right: 10px;
     color: var(--textcolourmain);
   }
-  
+  .logout
+{
+  fill: var(--textcolourmain);
+  margin-left: 3px;
+}
   .workspace {
     margin-top: 20px;
   }
@@ -387,9 +391,10 @@
 {
   padding: 10px 20px;
   border: none;
-  background-color: transparent;
+  background-color: var(--input);
   border-radius: 5px;
   cursor: pointer;
+  margin-left: 20px;
 }
 .adapt-button button
 {
