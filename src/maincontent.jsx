@@ -92,7 +92,7 @@ const Maincontent = () => {
   };
   const handleNotification = async () => {
     try {
-      const res = await fetch("http://localhost:4000/WORA/notify", {
+      const res = await fetch("https://wora-api.vercel.app/WORA/reminders/notify", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -110,7 +110,7 @@ const Maincontent = () => {
 
   const handleGenerate = async () => {
     try {
-      const contentRes = await fetch("http://localhost:4000/WORA/getResponse", {
+      const contentRes = await fetch("https://wora-api.vercel.app/WORA/contents/getResponse", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -126,14 +126,14 @@ const Maincontent = () => {
       const contentString = contentData.content;
 
       const [headingRes, hashtagRes] = await Promise.all([
-        fetch("http://localhost:4000/WORA/getHeading", {
+        fetch("https://wora-api.vercel.app/WORA/contents/getHeading", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ responsePrompt: contentString }),
         }),
-        fetch("http://localhost:4000/WORA/getHashtags", {
+        fetch("https://wora-api.vercel.app/WORA/contents/getHashtags", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -176,7 +176,7 @@ const Maincontent = () => {
 
   const handleAdapt = async () => {
     try {
-      const res = await fetch("http://localhost:4000/WORA/getAdaptedContent", {
+      const res = await fetch("https://wora-api.vercel.app/WORA/contents/getAdaptedContent", {
         //4
         method: "POST",
         headers: {
@@ -320,7 +320,7 @@ const Maincontent = () => {
     console.log(`User ID: ${noteUserId}`);
 
     try {
-      const response = await fetch("http://localhost:4000/WORA/saveContent", {
+      const response = await fetch("https://wora-api.vercel.app/WORA/contents/saveContent", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -23,7 +23,7 @@ const Notes = () => {
       }
       console.log("fetching notes for ", userId);
       try {
-        const response = await axios.get(`http://localhost:4000/WORA/getContent/${userId}`);
+        const response = await axios.get(`https://wora-api.vercel.app/WORA/contents/getContent/${userId}`);
         console.log(response.data);
         console.log(typeof(response.data));
           setNotes(response.data.notes);

@@ -13,7 +13,7 @@ const Loginpage = ({ onLoginSuccess }) => {
   const handleLoginSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch('http://localhost:4000/WORA/login', {
+      const response = await fetch('https://wora-api.vercel.app/WORA/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ const Loginpage = ({ onLoginSuccess }) => {
   const handleSignupSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch('http://localhost:4000/WORA/', {
+      const response = await fetch('https://wora-api.vercel.app/WORA/users/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
