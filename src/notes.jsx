@@ -75,7 +75,7 @@ const Notes = () => {
               <rect width="9" height="7" x="3" y="14" rx="1"></rect>
               <rect width="5" height="7" x="16" y="14" rx="1"></rect>
             </svg>
-            <span>Templates</span>
+            <span>Theme</span>
           </a>
           <a className="nav-item" href="#">
             <svg

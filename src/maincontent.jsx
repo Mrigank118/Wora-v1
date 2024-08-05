@@ -176,8 +176,8 @@ const Maincontent = () => {
 
   const handleAdapt = async () => {
     try {
+      console.log("Adapt content");
       const res = await fetch("https://wora-api.vercel.app/WORA/contents/getAdaptedContent", {
-        //4
         method: "POST",
         headers: {
           "Content-Type": "application/json",
